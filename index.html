@@ -2,7 +2,7 @@
 <html lang="lt">
 <head>
   <meta charset="UTF-8" />
-  <title>Daugybos žaidimas</title>
+  <title>Matematikos žaidimai</title>
 
   <style>
     body {
@@ -26,7 +26,16 @@
 
     h1 {
       font-size: 48px;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
+    }
+
+    .menu button {
+      width: 100%;
+      font-size: 40px;
+      padding: 24px;
+      margin-top: 20px;
+      border-radius: 16px;
+      cursor: pointer;
     }
 
     .question {
@@ -43,13 +52,12 @@
       width: 100%;
       font-size: 40px;
       padding: 20px;
-      margin-top: 15px;
       text-align: center;
       border-radius: 12px;
       border: 2px solid #999;
     }
 
-    button {
+    .game button {
       width: 100%;
       font-size: 36px;
       padding: 20px;
@@ -57,12 +65,32 @@
       border-radius: 12px;
       cursor: pointer;
     }
+
+    .back {
+      margin-top: 30px;
+      font-size: 24px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: #333;
+    }
   </style>
 </head>
 <body>
 
-  <div class="box" id="box">
-    <h1>🎮 Daugybos žaidimas</h1>
+<div class="box" id="box">
+
+  <!-- MENIU -->
+  <div id="menu" class="menu">
+    <h1>🎮 Matematikos žaidimai</h1>
+    <button onclick="startGame('multiply')">➗ Daugyba</button>
+    <button onclick="startGame('divide')">➖ Dalyba</button>
+    <button onclick="startGame('mixed')">🔀 Mišrus</button>
+  </div>
+
+  <!-- ŽAIDIMAS -->
+  <div id="game" class="game" style="display:none;">
+    <h1 id="gameTitle"></h1>
 
     <div class="stats">
       ✅ Teisingi: <span id="correct">0</span> |
@@ -72,57 +100,98 @@
     <div class="question" id="question"></div>
 
     <form onsubmit="check(event)">
-      <input
-        id="answer"
-        type="number"
-        placeholder="Įrašyk atsakymą"
-        autofocus
-      />
+      <input id="answer" type="number" placeholder="Įrašyk atsakymą" autofocus />
       <button type="submit">Tikrinti</button>
     </form>
+
+    <button class="back" onclick="goBack()">⬅ Grįžti į meniu</button>
   </div>
 
-  <script>
-    let a, b;
-    let correctCount = 0;
-    let wrongCount = 0;
+</div>
 
-    function naujasPavyzdys() {
+<script>
+  let a, b, correctAnswer;
+  let correctCount = 0;
+  let wrongCount = 0;
+  let mode = "";
+  let currentOperation = "";
+
+  function startGame(selectedMode) {
+    mode = selectedMode;
+    correctCount = 0;
+    wrongCount = 0;
+
+    document.getElementById("correct").innerText = 0;
+    document.getElementById("wrong").innerText = 0;
+
+    document.getElementById("menu").style.display = "none";
+    document.getElementById("game").style.display = "block";
+
+    const titles = {
+      multiply: "➗ Daugybos žaidimas",
+      divide: "➖ Dalybos žaidimas",
+      mixed: "🔀 Mišrus žaidimas"
+    };
+
+    document.getElementById("gameTitle").innerText = titles[mode];
+    newQuestion();
+  }
+
+  function newQuestion() {
+    const box = document.getElementById("box");
+    box.style.background = "white";
+
+    // nustatom operaciją
+    if (mode === "mixed") {
+      currentOperation = Math.random() < 0.5 ? "multiply" : "divide";
+    } else {
+      currentOperation = mode;
+    }
+
+    if (currentOperation === "multiply") {
       a = Math.ceil(Math.random() * 10);
       b = Math.ceil(Math.random() * 10);
-
+      correctAnswer = a * b;
       document.getElementById("question").innerText =
         `Kiek yra ${a} × ${b}?`;
-
-      const input = document.getElementById("answer");
-      input.value = "";
-      input.focus();
+    } else {
+      b = Math.ceil(Math.random() * 10);
+      correctAnswer = Math.ceil(Math.random() * 10);
+      a = b * correctAnswer;
+      document.getElementById("question").innerText =
+        `Kiek yra ${a} ÷ ${b}?`;
     }
 
-    function check(event) {
-      if (event) event.preventDefault();
+    const input = document.getElementById("answer");
+    input.value = "";
+    input.focus();
+  }
 
-      const box = document.getElementById("box");
-      const value = Number(document.getElementById("answer").value);
+  function check(event) {
+    event.preventDefault();
 
-      if (value === a * b) {
-        correctCount++;
-        document.getElementById("correct").innerText = correctCount;
-        box.style.background = "#bbf7d0"; // žalia
-      } else {
-        wrongCount++;
-        document.getElementById("wrong").innerText = wrongCount;
-        box.style.background = "#fecaca"; // raudona
-      }
+    const box = document.getElementById("box");
+    const value = Number(document.getElementById("answer").value);
 
-      setTimeout(() => {
-        box.style.background = "white";
-        naujasPavyzdys();
-      }, 1000);
+    if (value === correctAnswer) {
+      correctCount++;
+      document.getElementById("correct").innerText = correctCount;
+      box.style.background = "#bbf7d0";
+    } else {
+      wrongCount++;
+      document.getElementById("wrong").innerText = wrongCount;
+      box.style.background = "#fecaca";
     }
 
-    naujasPavyzdys();
-  </script>
+    setTimeout(newQuestion, 1000);
+  }
+
+  function goBack() {
+    document.getElementById("game").style.display = "none";
+    document.getElementById("menu").style.display = "block";
+    document.getElementById("box").style.background = "white";
+  }
+</script>
 
 </body>
 </html>
