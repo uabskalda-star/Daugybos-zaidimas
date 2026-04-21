@@ -26,12 +26,17 @@
 
     h1 {
       font-size: 48px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
 
     .question {
       font-size: 56px;
       margin: 30px 0;
+    }
+
+    .stats {
+      font-size: 28px;
+      margin-bottom: 20px;
     }
 
     input {
@@ -59,9 +64,13 @@
   <div class="box" id="box">
     <h1>🎮 Daugybos žaidimas</h1>
 
+    <div class="stats">
+      ✅ Teisingi: <span id="correct">0</span> |
+      ❌ Klaidingi: <span id="wrong">0</span>
+    </div>
+
     <div class="question" id="question"></div>
 
-    <!-- FORM leidžia naudoti ENTER -->
     <form onsubmit="check(event)">
       <input
         id="answer"
@@ -75,6 +84,8 @@
 
   <script>
     let a, b;
+    let correctCount = 0;
+    let wrongCount = 0;
 
     function naujasPavyzdys() {
       a = Math.ceil(Math.random() * 10);
@@ -89,14 +100,18 @@
     }
 
     function check(event) {
-      if (event) event.preventDefault(); // ENTER neperkrauna puslapio
+      if (event) event.preventDefault();
 
       const box = document.getElementById("box");
       const value = Number(document.getElementById("answer").value);
 
       if (value === a * b) {
+        correctCount++;
+        document.getElementById("correct").innerText = correctCount;
         box.style.background = "#bbf7d0"; // žalia
       } else {
+        wrongCount++;
+        document.getElementById("wrong").innerText = wrongCount;
         box.style.background = "#fecaca"; // raudona
       }
 
