@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+  <meta charset="UTF-8">
+  <title>Daugybos žaidimas</title>
+  <style>
+    body {
+      margin: 0;
+      background: #e0f2fe;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+    }
+    .box {
+      width: 900px;
+      padding: 72px;
+      background: white;
+      border-radius: 32px;
+      text-align: center;
+      transition: background 0.3s;
+    }
+    h1 { font-size: 48px; }
+    .question { font-size: 56px; margin: 30px 0; }
+    input, button {
+      width: 100%;
+      font-size: 40px;
+      padding: 20px;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="box" id="box">
+  <h1>🎮 Daugybos žaidimas</h1>
+  <div class="question" id="question"></div>
+  <input id="answer" type="number" placeholder="Įrašyk atsakymą">
+  <button onclick="check()">Tikrinti</button>
+</div>
+
+<script>
+  let a, b;
+
+  function naujas() {
+    a = Math.ceil(Math.random() * 10);
+    b = Math.ceil(Math.random() * 10);
+    question.textContent = `Kiek yra ${a} × ${b}?`;
+    answer.value = "";
+    answer.focus();
+  }
+
+  function check() {
+    box.style.background =
+      Number(answer.value) === a * b ? "#bbf7d0" : "#fecaca";
+    setTimeout(() => {
+      box.style.background = "white";
+      naujas();
+    }, 1000);
+  }
+
+  naujas();
+</script>
+
+</body>
+</html>

@@ -3,195 +3,69 @@
 <head>
   <meta charset="UTF-8" />
   <title>Matematikos žaidimai</title>
-
   <style>
     body {
       margin: 0;
+      height: 100vh;
       background: #e0f2fe;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
       font-family: Arial, sans-serif;
     }
-
-    .box {
+    .container {
       width: 900px;
-      padding: 72px;
       background: white;
-      border-radius: 32px;
+      padding: 60px;
+      border-radius: 30px;
       text-align: center;
-      transition: background 0.3s ease;
     }
-
     h1 {
       font-size: 48px;
-      margin-bottom: 20px;
+      margin-bottom: 40px;
     }
-
-    .menu button {
-      width: 100%;
-      font-size: 40px;
-      padding: 24px;
-      margin-top: 20px;
-      border-radius: 16px;
+    .sections {
+      display: flex;
+      gap: 40px;
+    }
+    .section {
+      flex: 1;
+      padding: 50px;
+      border-radius: 24px;
       cursor: pointer;
-    }
-
-    .question {
-      font-size: 56px;
-      margin: 30px 0;
-    }
-
-    .stats {
-      font-size: 28px;
-      margin-bottom: 20px;
-    }
-
-    input {
-      width: 100%;
       font-size: 40px;
-      padding: 20px;
-      text-align: center;
-      border-radius: 12px;
-      border: 2px solid #999;
+      transition: transform 0.2s;
     }
-
-    .game button {
-      width: 100%;
-      font-size: 36px;
-      padding: 20px;
+    .section:hover {
+      transform: scale(1.05);
+    }
+    .classic {
+      background: #bbf7d0;
+    }
+    .fight {
+      background: #fecaca;
+    }
+    .section small {
+      display: block;
+      font-size: 22px;
       margin-top: 15px;
-      border-radius: 12px;
-      cursor: pointer;
-    }
-
-    .back {
-      margin-top: 30px;
-      font-size: 24px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      color: #333;
     }
   </style>
 </head>
 <body>
 
-<div class="box" id="box">
+<div class="container">
+  <h1>🎮 Matematikos žaidimai</h1>
 
-  <!-- MENIU -->
-  <div id="menu" class="menu">
-    <h1>🎮 Matematikos žaidimai</h1>
-    <button onclick="startGame('multiply')">➗ Daugyba</button>
-    <button onclick="startGame('divide')">➖ Dalyba</button>
-    <button onclick="startGame('mixed')">🔀 Mišrus</button>
-  </div>
-
-  <!-- ŽAIDIMAS -->
-  <div id="game" class="game" style="display:none;">
-    <h1 id="gameTitle"></h1>
-
-    <div class="stats">
-      ✅ Teisingi: <span id="correct">0</span> |
-      ❌ Klaidingi: <span id="wrong">0</span>
+  <div class="sections">
+    <div class="section classic"
+         onclick="location.href='klasikinis/daugyl>
     </div>
 
-    <div class="question" id="question"></div>
-
-    <form onsubmit="check(event)">
-      <input id="answer" type="number" placeholder="Įrašyk atsakymą" autofocus />
-      <button type="submit">Tikrinti</button>
-    </form>
-
-    <button class="back" onclick="goBack()">⬅ Grįžti į meniu</button>
+    <div class="section fight"
+         onclick="location.href='kova/index.html'</div>
   </div>
-
 </div>
-
-<script>
-  let a, b, correctAnswer;
-  let correctCount = 0;
-  let wrongCount = 0;
-  let mode = "";
-  let currentOperation = "";
-
-  function startGame(selectedMode) {
-    mode = selectedMode;
-    correctCount = 0;
-    wrongCount = 0;
-
-    document.getElementById("correct").innerText = 0;
-    document.getElementById("wrong").innerText = 0;
-
-    document.getElementById("menu").style.display = "none";
-    document.getElementById("game").style.display = "block";
-
-    const titles = {
-      multiply: "➗ Daugybos žaidimas",
-      divide: "➖ Dalybos žaidimas",
-      mixed: "🔀 Mišrus žaidimas"
-    };
-
-    document.getElementById("gameTitle").innerText = titles[mode];
-    newQuestion();
-  }
-
-  function newQuestion() {
-    const box = document.getElementById("box");
-    box.style.background = "white";
-
-    // nustatom operaciją
-    if (mode === "mixed") {
-      currentOperation = Math.random() < 0.5 ? "multiply" : "divide";
-    } else {
-      currentOperation = mode;
-    }
-
-    if (currentOperation === "multiply") {
-      a = Math.ceil(Math.random() * 10);
-      b = Math.ceil(Math.random() * 10);
-      correctAnswer = a * b;
-      document.getElementById("question").innerText =
-        `Kiek yra ${a} × ${b}?`;
-    } else {
-      b = Math.ceil(Math.random() * 10);
-      correctAnswer = Math.ceil(Math.random() * 10);
-      a = b * correctAnswer;
-      document.getElementById("question").innerText =
-        `Kiek yra ${a} ÷ ${b}?`;
-    }
-
-    const input = document.getElementById("answer");
-    input.value = "";
-    input.focus();
-  }
-
-  function check(event) {
-    event.preventDefault();
-
-    const box = document.getElementById("box");
-    const value = Number(document.getElementById("answer").value);
-
-    if (value === correctAnswer) {
-      correctCount++;
-      document.getElementById("correct").innerText = correctCount;
-      box.style.background = "#bbf7d0";
-    } else {
-      wrongCount++;
-      document.getElementById("wrong").innerText = wrongCount;
-      box.style.background = "#fecaca";
-    }
-
-    setTimeout(newQuestion, 1000);
-  }
-
-  function goBack() {
-    document.getElementById("game").style.display = "none";
-    document.getElementById("menu").style.display = "block";
-    document.getElementById("box").style.background = "white";
-  }
-</script>
 
 </body>
 </html>
